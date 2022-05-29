@@ -11,4 +11,7 @@ const ad = new AdRecord({
 
 test('Can build AdRecord', () => {
     expect(ad.name).toBe('Test');
+    expect(ad.name.length).toBeLessThan(100);
+    expect(typeof ad.lat).toBe('number');
+    expect(ad.url).toContain('https://');
 })

@@ -1,9 +1,9 @@
-import {AdEntity} from "../types";
+import {AdEntity, NewAdEntity} from "../types";
 import {ValidationError} from "../utils/errors";
+import {FieldPacket} from "mysql2";
+import { pool } from "../utils/db";
 
-interface NewAdEntity extends Omit<AdEntity, 'id'> {
-    id?: string;
-}
+type AdRecordResults = [AdRecord[], FieldPacket[]]
 
 export class AdRecord implements AdEntity {
     id: string;
@@ -35,6 +35,7 @@ export class AdRecord implements AdEntity {
             throw new ValidationError('Announcement cannot be located.')
         }
 
+        this.id = obj.id;
         this.name = obj.name;
         this.description = obj.description;
         this.price = obj.price;
@@ -43,4 +44,11 @@ export class AdRecord implements AdEntity {
         this.lon = obj.lon;
     }
 
+    static async getOne(id: string): Promise<AdRecord | null> {
+        const [results] = await pool.execute("SELECT * from `ads` WHERE id = :id", {
+            id,
+    }) as AdRecordResults;
+
+        return results.length === 0 ? null : new AdRecord(results[0])
+}
 }
