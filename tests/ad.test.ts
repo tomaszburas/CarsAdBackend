@@ -14,3 +14,25 @@ test('AdRecord returns null from database for unexisting entry', async () => {
 
     expect(ad).toBeNull();
 })
+
+test('Added new AdRecord to database', async () => {
+    const ad = {
+        name: 'BMW',
+        description: 'M3',
+        price: 122000.22,
+        lat: 52.232938,
+        lon: 21.0611941,
+        url: 'https//allegro.pl'
+    }
+
+    const addedAd = new AdRecord(ad);
+    await addedAd.insert();
+
+
+})
+
+test('AdRecord returns data from database for all entry', async () => {
+    const ads = await AdRecord.getAll();
+
+    console.log(ads);
+})
