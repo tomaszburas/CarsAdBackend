@@ -34,5 +34,7 @@ test('Added new AdRecord to database', async () => {
 test('AdRecord returns data from database for all entry', async () => {
     const ads = await AdRecord.getAll();
 
-    console.log(ads);
+    if (!ads.length) {
+        expect(ads).toBeNull();
+    }
 })
