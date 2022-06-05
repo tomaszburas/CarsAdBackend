@@ -8,36 +8,53 @@ type AdRecordResults = [AdRecord[], FieldPacket[]];
 
 export class AdRecord implements AdEntity {
   id: string;
-  name: string;
+  brand: string;
+  model: string;
+  power: number;
+  version: string;
+  year: number;
   price: number;
-  description: string;
   url: string;
   lat: number;
   lon: number;
 
   constructor(obj: NewAdEntity) {
-    if (!obj.name || obj.name.length > 100) {
+    if (!obj.brand || obj.brand.length > 30) {
       throw new ValidationError(
-        "Announcement name cannot be empty and cannot be longer than 100 characters."
+        "Announcement brand name cannot be empty and cannot be longer than 30 characters."
       );
     }
 
-    if (obj.description.length > 1000) {
+    if (!obj.model || obj.model.length > 30) {
       throw new ValidationError(
-        "Announcement description cannot be longer than 1000 characters."
+        "Announcement model name cannot be empty and cannot be longer than 30 characters."
       );
     }
 
-    if (obj.price < 0 || obj.price > 9999999) {
+    if (!obj.price || obj.price < 0 || obj.price > 9999999) {
       throw new ValidationError(
-        "Announcement price cannot be smaller than 0 and larger than 9 999 999."
+        "Announcement price cannot be empty, smaller than 0 and larger than 9 999 999."
       );
     }
 
-    if (!obj.url || obj.url.length > 100) {
+    if (!obj.url || obj.url.length > 500) {
       throw new ValidationError(
-        "Announcement url cannot be empty and cannot be longer than 100 characters."
+        "Announcement url cannot be empty and cannot be longer than 500 characters."
       );
+    }
+
+    if (!obj.version || obj.version.length > 50) {
+      throw new ValidationError(
+        "Announcement version cannot be empty and cannot be longer than 50 characters."
+      );
+    }
+
+    if (!obj.power) {
+      throw new ValidationError("Announcement power cannot be empty.");
+    }
+
+    if (!obj.year) {
+      throw new ValidationError("Announcement year cannot be empty.");
     }
 
     if (typeof obj.lat !== "number" || typeof obj.lon !== "number") {
@@ -45,8 +62,11 @@ export class AdRecord implements AdEntity {
     }
 
     this.id = obj.id;
-    this.name = obj.name;
-    this.description = obj.description;
+    this.brand = obj.brand;
+    this.model = obj.model;
+    this.version = obj.version;
+    this.year = obj.year;
+    this.power = obj.power;
     this.price = obj.price;
     this.url = obj.url;
     this.lat = obj.lat;
@@ -66,7 +86,7 @@ export class AdRecord implements AdEntity {
 
   static async findAll(name: string): Promise<SimpleAdEntity[] | null> {
     const [results] = (await pool.execute(
-      "SELECT * FROM `ads` WHERE `name` LIKE :search",
+      "SELECT * FROM `ads` WHERE `brand` LIKE :search",
       {
         search: `%${name}%`,
       }
@@ -88,7 +108,7 @@ export class AdRecord implements AdEntity {
     }
 
     await pool.execute(
-      "INSERT INTO `ads` VALUES (:id, :name, :description, :url, :price, :lat, :lon)",
+      "INSERT INTO `ads` VALUES (:id, :brand, :model, :version, :year, :power, :price, :url, :lat, :lon)",
       this
     );
   }

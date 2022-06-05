@@ -5,8 +5,11 @@ export interface SimpleAdEntity {
 }
 
 export interface AdEntity extends SimpleAdEntity {
-  name: string;
-  description: string;
+  brand: string;
+  model: string;
+  version: string;
+  year: number;
+  power: number;
   price: number;
   url: string;
 }
