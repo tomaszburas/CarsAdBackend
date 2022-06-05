@@ -43,9 +43,9 @@ export class AdRecord implements AdEntity {
       );
     }
 
-    if (!obj.version || obj.version.length > 50) {
+    if (obj.version && obj.version.length > 50) {
       throw new ValidationError(
-        "Announcement version cannot be empty and cannot be longer than 50 characters."
+        "Announcement version cannot be longer than 50 characters."
       );
     }
 
