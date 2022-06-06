@@ -3,6 +3,7 @@ import { ValidationError } from "../utils/errors";
 import { FieldPacket } from "mysql2";
 import { pool } from "../utils/db";
 import { v4 as uuid } from "uuid";
+import {validationUrl} from "../utils/validation-url";
 
 type AdRecordResults = [AdRecord[], FieldPacket[]];
 
@@ -40,6 +41,12 @@ export class AdRecord implements AdEntity {
     if (!obj.url || obj.url.length > 500) {
       throw new ValidationError(
         "Announcement url cannot be empty and cannot be longer than 500 characters."
+      );
+    }
+
+    if (!validationUrl(obj.url)) {
+      throw new ValidationError(
+          'Announcement url must start with "https://www.otomoto.pl/" or "https://www.olx.pl/".'
       );
     }
 
