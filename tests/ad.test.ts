@@ -11,7 +11,7 @@ test("AdRecord returns data from database for one entry", async () => {
 
   expect(ad).toBeDefined();
   expect(ad.id).toBe("123abc");
-  expect(ad.description).toBe("Test description");
+  expect(ad.brand).toBe("Test description");
   expect(ad.price).toBe(10.2);
 });
 
@@ -23,12 +23,15 @@ test("AdRecord returns null from database for unexisting entry", async () => {
 
 test("Added new record to database", async () => {
   const ad = {
-    name: "[Test] BMW",
-    description: "M3",
+    brand: "[Test] BMW",
+    model: "M3",
+    version: "Series3",
+    power: 443,
+    year: 2021,
     price: 122000.22,
     lat: 52.232938,
     lon: 21.0611941,
-    url: "https//allegro.pl",
+    url: "https//otomoto.pl",
   };
 
   const addedAd = new AdRecord(ad);
