@@ -21,7 +21,7 @@ app.use(
   })
 );
 
-app.use("/ad", adRouter);
+app.use("/api/cars-ad/ad", adRouter);
 
 app.use(handleError);
 app.listen(PORT, () => `Server listening on port ${PORT}`);
